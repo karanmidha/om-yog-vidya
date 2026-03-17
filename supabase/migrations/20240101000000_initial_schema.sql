@@ -155,6 +155,140 @@ CREATE TRIGGER update_bookings_updated_at BEFORE UPDATE ON bookings
 CREATE TRIGGER update_payments_updated_at BEFORE UPDATE ON payments
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+-- Enable Row Level Security (RLS) on all tables
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE practice_styles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE time_slots ENABLE ROW LEVEL SECURITY;
+ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE contact_inquiries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for users table
+CREATE POLICY "Users can view own profile" ON users
+    FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own profile" ON users
+    FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Admins can view all users" ON users
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
+        )
+    );
+
+-- RLS Policies for user_profiles table
+CREATE POLICY "Users can view own profile" ON user_profiles
+    FOR SELECT USING (user_id = auth.uid());
+
+CREATE POLICY "Users can update own profile" ON user_profiles
+    FOR UPDATE USING (user_id = auth.uid());
+
+CREATE POLICY "Users can insert own profile" ON user_profiles
+    FOR INSERT WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Admins can manage all profiles" ON user_profiles
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
+        )
+    );
+
+-- RLS Policies for practice_styles table
+CREATE POLICY "Anyone can view active practice styles" ON practice_styles
+    FOR SELECT USING (is_active = true);
+
+CREATE POLICY "Admins can manage practice styles" ON practice_styles
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
+        )
+    );
+
+-- RLS Policies for time_slots table
+CREATE POLICY "Anyone can view available time slots" ON time_slots
+    FOR SELECT USING (is_available = true);
+
+CREATE POLICY "Instructors can manage own time slots" ON time_slots
+    FOR ALL USING (instructor_id = auth.uid());
+
+CREATE POLICY "Admins can manage all time slots" ON time_slots
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
+        )
+    );
+
+-- RLS Policies for bookings table
+CREATE POLICY "Users can view own bookings" ON bookings
+    FOR SELECT USING (user_id = auth.uid());
+
+CREATE POLICY "Users can create own bookings" ON bookings
+    FOR INSERT WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can update own pending bookings" ON bookings
+    FOR UPDATE USING (user_id = auth.uid() AND status = 'pending');
+
+CREATE POLICY "Instructors can view bookings for their time slots" ON bookings
+    FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM time_slots
+            WHERE time_slots.id = bookings.time_slot_id
+            AND time_slots.instructor_id = auth.uid()
+        )
+    );
+
+CREATE POLICY "Admins can manage all bookings" ON bookings
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
+        )
+    );
+
+-- RLS Policies for testimonials table
+CREATE POLICY "Anyone can view approved testimonials" ON testimonials
+    FOR SELECT USING (status = 'approved');
+
+CREATE POLICY "Anyone can submit testimonials" ON testimonials
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Admins can manage all testimonials" ON testimonials
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
+        )
+    );
+
+-- RLS Policies for contact_inquiries table
+CREATE POLICY "Anyone can submit contact inquiries" ON contact_inquiries
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Admins can manage all contact inquiries" ON contact_inquiries
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
+        )
+    );
+
+-- RLS Policies for payments table
+CREATE POLICY "Users can view own payments" ON payments
+    FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM bookings
+            WHERE bookings.id = payments.booking_id
+            AND bookings.user_id = auth.uid()
+        )
+    );
+
+CREATE POLICY "Admins can manage all payments" ON payments
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
+        )
+    );
+
 -- Insert default practice styles
 INSERT INTO practice_styles (name, description, duration_minutes, max_students, price) VALUES
 ('Hatha Yoga', 'Gentle, slow-paced practice focusing on basic postures and breathing techniques. Perfect for beginners and those seeking relaxation.', 60, 15, 500.00),
