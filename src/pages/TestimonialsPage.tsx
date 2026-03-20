@@ -8,6 +8,7 @@ interface Testimonial {
   content: string;
   rating: number;
   practice_style?: string;
+  student_type?: string;
   status: 'pending' | 'approved' | 'rejected';
   submitted_at: string;
 }
@@ -114,42 +115,70 @@ const TestimonialsPage: React.FC = () => {
   return (
     <div className="min-h-screen py-12 bg-white">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-serif text-secondary-900 text-center mb-12">
-          Student Testimonials
-        </h1>
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-serif text-secondary-900 mb-6">
+            Our Shared Journey
+          </h1>
+          <p className="text-lg text-secondary-700 max-w-3xl mx-auto">
+            Read the stories of transformation and peace from our community. Every breath counts, and every journey is unique.
+          </p>
+          <div className="mt-8">
+            <button
+              onClick={() => document.getElementById('testimonial-form')?.scrollIntoView({ behavior: 'smooth' })}
+              className="btn-primary px-6 py-3"
+            >
+              Share Your Experience
+            </button>
+          </div>
+        </div>
 
         {/* Testimonials Grid */}
         <div className="max-w-6xl mx-auto mb-16">
           {loading ? (
             <div className="text-center py-12">
-              <div className="text-secondary-600">Loading testimonials...</div>
+              <div className="text-secondary-600">Loading our community stories...</div>
             </div>
           ) : testimonials.length === 0 ? (
             <div className="text-center py-12">
-              <div className="text-secondary-600">No testimonials yet. Be the first to share your experience!</div>
+              <div className="text-secondary-600">Be the first to share your transformation journey!</div>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial) => (
-                <div key={testimonial.id} className="card">
+                <div key={testimonial.id} className="card bg-primary-50 border border-primary-200">
+                  {/* Profile Image Placeholder */}
+                  <div className="flex items-center mb-6">
+                    <div className="w-16 h-16 bg-accent-200 rounded-full flex items-center justify-center mr-4">
+                      <span className="text-accent-700 text-xl font-bold">
+                        {testimonial.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="text-secondary-900 font-semibold text-lg">
+                        {testimonial.name}
+                      </h3>
+                      <p className="text-secondary-600 text-sm">
+                        {testimonial.student_type || `${testimonial.practice_style} Student`}
+                      </p>
+                    </div>
+                  </div>
+
                   <div className="flex items-center mb-4">
                     <div className="text-accent-500 text-lg">
                       {renderStars(testimonial.rating)}
                     </div>
                   </div>
-                  <p className="text-secondary-700 mb-4 italic">
+
+                  <p className="text-secondary-700 mb-4 italic leading-relaxed">
                     "{testimonial.content}"
                   </p>
-                  <div className="text-secondary-900 font-medium">
-                    — {testimonial.name}
-                  </div>
-                  <div className="text-secondary-500 text-sm mt-1">
+
+                  <div className="text-secondary-500 text-sm mt-auto pt-4 border-t border-primary-200">
                     {testimonial.practice_style && (
                       <span className="text-accent-600 font-medium">
-                        {testimonial.practice_style} •
+                        {testimonial.practice_style} Practice
                       </span>
                     )}
-                    {new Date(testimonial.submitted_at).toLocaleDateString()}
                   </div>
                 </div>
               ))}
@@ -158,8 +187,8 @@ const TestimonialsPage: React.FC = () => {
         </div>
 
         {/* Add Testimonial Form */}
-        <div className="max-w-2xl mx-auto">
-          <div className="card">
+        <div id="testimonial-form" className="max-w-2xl mx-auto">
+          <div className="card bg-primary-50 border border-primary-200">
             <h2 className="text-2xl font-serif text-secondary-900 mb-6 text-center">
               Share Your Experience
             </h2>
