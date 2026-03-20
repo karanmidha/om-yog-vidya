@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import DateSelector from '../components/booking/DateSelector';
-import TimeSlotSelector from '../components/booking/TimeSlotSelector';
-import BookingSummary from '../components/booking/BookingSummary';
+import CalendarDateSelector from '../components/booking/CalendarDateSelector';
+import GroupedTimeSlotSelector from '../components/booking/GroupedTimeSlotSelector';
+import EnhancedBookingSummary from '../components/booking/EnhancedBookingSummary';
 import type { Database } from '../types/database';
 import { openRazorPayCheckout, createRazorPayOrder, verifyPaymentSignature } from '../utils/razorpay';
 
@@ -264,9 +264,12 @@ const BookingPage: React.FC = () => {
   return (
     <div className="min-h-screen py-12 bg-primary-100">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-serif text-secondary-900 text-center mb-12">
-          Book Your Session
+        <h1 className="text-4xl font-serif text-secondary-900 text-center mb-4">
+          Book Your Flow
         </h1>
+        <p className="text-lg text-secondary-600 text-center italic mb-12">
+          "Yoga is the journey of the self, through the self, to the self."
+        </p>
 
         {/* Error Alert */}
         {bookingError && (
@@ -293,25 +296,24 @@ const BookingPage: React.FC = () => {
           </div>
         )}
 
-        <div className="max-w-6xl mx-auto">
-          {/* Responsive Layout: Stacked on mobile, side-by-side on desktop */}
-          <div className="grid lg:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto">
+          {/* 2-Column Layout: Date & Time Selection | Booking Summary */}
+          <div className="grid lg:grid-cols-2 gap-8">
 
-            {/* Date Selection */}
-            <div className="lg:col-span-1">
+            {/* Left Panel: Date & Time Selection */}
+            <div className="space-y-6">
+              {/* Date Selection */}
               <div className="card h-fit">
-                <DateSelector
+                <CalendarDateSelector
                   selectedDate={selectedDate}
                   onDateSelect={handleDateSelect}
                   disabled={isProcessing}
                 />
               </div>
-            </div>
 
-            {/* Time Slot Selection */}
-            <div className="lg:col-span-1">
+              {/* Time Slot Selection */}
               <div className="card h-fit">
-                <TimeSlotSelector
+                <GroupedTimeSlotSelector
                   selectedDate={selectedDate}
                   selectedSlot={selectedSlot}
                   onSlotSelect={handleSlotSelect}
@@ -320,10 +322,10 @@ const BookingPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Booking Summary */}
-            <div className="lg:col-span-1">
+            {/* Right Panel: Booking Summary */}
+            <div>
               <div className="card h-fit sticky top-6">
-                <BookingSummary
+                <EnhancedBookingSummary
                   selectedDate={selectedDate}
                   selectedSlot={selectedSlot}
                   onBookingSubmit={handleBookingSubmit}
@@ -372,6 +374,23 @@ const BookingPage: React.FC = () => {
                   </a>
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer with Policy Links */}
+        <div className="max-w-4xl mx-auto mt-8">
+          <div className="border-t border-secondary-200 pt-6">
+            <div className="flex flex-col md:flex-row justify-between items-center text-sm text-secondary-600">
+              <div className="flex space-x-6 mb-4 md:mb-0">
+                <a href="/cancellation-policy" className="hover:text-secondary-800 transition-colors">
+                  Cancellation Policy
+                </a>
+                <a href="/terms-of-service" className="hover:text-secondary-800 transition-colors">
+                  Terms of Service
+                </a>
+              </div>
+              <p>© 2023 OmYogVidya Studio. All rights reserved.</p>
             </div>
           </div>
         </div>
