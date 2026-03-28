@@ -118,17 +118,17 @@ const HomePage: React.FC = () => {
               <p className="text-stone-600 leading-relaxed">Slow-paced practice targeting deep connective tissues through long-held passive poses.</p>
             </div>
 
-            {/* Style 3: Restorative */}
+            {/* Style 3: Pilates */}
             <div className="group p-8 border border-sage-100 hover:bg-sage-50 transition-all duration-300">
               <div className="mb-6 overflow-hidden">
                 <img
-                  alt="Restorative Yoga"
+                  alt="Pilates"
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                   src="/restorative.png"
                 />
               </div>
-              <h3 className="text-2xl mb-4 text-sage-800">Restorative</h3>
-              <p className="text-stone-600 leading-relaxed">Deep relaxation using props to support the body, allowing for total release and recovery.</p>
+              <h3 className="text-2xl mb-4 text-sage-800">Pilates</h3>
+              <p className="text-stone-600 leading-relaxed">Strengthen your core and improve flexibility through controlled movements that enhance body awareness and alignment.</p>
             </div>
           </div>
         </div>
@@ -191,19 +191,6 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* H-04: Share Your Experience Button - moved below testimonials with 24px margin */}
-      <section className="pt-6 bg-cream-100">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center">
-            <a
-              href="/contact"
-              className="btn-primary px-8 py-3 hover:scale-105 transform transition-all duration-300"
-            >
-              Share Your Experience
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Banner - H-05: Removed decorative dots, using solid dark green background */}
       <section className="py-20 bg-secondary-800 relative">
