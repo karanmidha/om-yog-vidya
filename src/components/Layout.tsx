@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import type { NavigationItem } from '../types';
 
 const navigationItems: NavigationItem[] = [
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact Us', href: '/contact' },
   { label: 'Book Session', href: '/booking' },
 ];
 
@@ -71,7 +71,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <ul className="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest text-stone-600 pr-6">
               <li>
                 <Link to="/contact" className={`hover:text-sage-600 transition-colors ${location.pathname === '/contact' ? 'text-sage-600' : ''}`}>
-                  Contact
+                  Contact Us
                 </Link>
               </li>
               <li>
@@ -170,7 +170,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="flex flex-col items-center space-y-4">
             {/* Contact Info Only */}
             <div className="text-center">
-              <h3 className="text-lg font-medium mb-3 text-accent-200">Contact</h3>
               <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-1 sm:space-y-0 text-accent-200">
                 <div>📧 info@omyogvidya.com</div>
                 <div>📞 +91 98765 43210</div>
