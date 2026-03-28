@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
   // Hero carousel images configuration
   const heroImages = [
     {
-      src: "/hero.png",
+      src: "/images/hero-carousel.png",
       alt: "Serene yoga session in a bright studio",
       title: "Find Your Flow",
       subtitle: "Reconnect with Self"
