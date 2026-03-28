@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 const HomePage: React.FC = () => {
 
@@ -26,123 +26,25 @@ const HomePage: React.FC = () => {
     },
   ];
 
-  // Hero carousel images configuration
-  const heroImages = [
-    {
-      src: "/images/hero-carousel.png",
-      alt: "Serene yoga session in a bright studio",
-      title: "Find Your Flow",
-      subtitle: "Reconnect with Self"
-    }
-    // Additional images can be added here as they become available
-  ];
-
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  // Auto-advance carousel (only if multiple images)
-  useEffect(() => {
-    if (heroImages.length > 1) {
-      const interval = setInterval(() => {
-        setCurrentImageIndex((prevIndex) =>
-          (prevIndex + 1) % heroImages.length
-        );
-      }, 5000); // Change image every 5 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [heroImages.length]);
-
-  const goToSlide = (index: number) => {
-    setCurrentImageIndex(index);
-  };
-
-  const goToNextSlide = () => {
-    setCurrentImageIndex((prevIndex) =>
-      (prevIndex + 1) % heroImages.length
-    );
-  };
-
-  const goToPrevSlide = () => {
-    setCurrentImageIndex((prevIndex) =>
-      (prevIndex - 1 + heroImages.length) % heroImages.length
-    );
-  };
-
-  const currentImage = heroImages[currentImageIndex];
-
   return (
     <div className="min-h-screen">
-      {/* Hero Carousel Section */}
+      {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center overflow-hidden">
-        {/* Background Image with Smooth Transitions */}
         <div className="absolute inset-0 z-0">
-          {heroImages.map((image, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <img
-                src={image.src}
-                alt={image.alt}
-                className="w-full h-full object-cover"
-                loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-              />
-            </div>
-          ))}
+          <img
+            src="/images/hero-carousel.png"
+            alt="Serene yoga session in a bright studio"
+            className="w-full h-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
           <div className="absolute inset-0 bg-sage-800/20"></div>
         </div>
-
-        {/* Navigation Controls (only show if multiple images) */}
-        {heroImages.length > 1 && (
-          <>
-            {/* Previous Button */}
-            <button
-              onClick={goToPrevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-wood-500/80 hover:bg-wood-600 text-white p-3 rounded-full transition-all transform hover:scale-110"
-              aria-label="Previous image"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            {/* Next Button */}
-            <button
-              onClick={goToNextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-wood-500/80 hover:bg-wood-600 text-white p-3 rounded-full transition-all transform hover:scale-110"
-              aria-label="Next image"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-
-            {/* Dot Indicators */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-3">
-              {heroImages.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${
-                    index === currentImageIndex
-                      ? 'bg-wood-500 scale-110'
-                      : 'bg-white/50 hover:bg-white/75'
-                  }`}
-                  aria-label={`Go to image ${index + 1}`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-        {/* Hero Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="max-w-2xl bg-cream-50/80 backdrop-blur-sm p-10 md:p-16 border-l-4 border-wood-500">
             <h1 className="text-5xl md:text-6xl mb-6 text-stone-900 leading-tight">
-              {currentImage.title}, <br/>
-              <span className="italic font-normal text-sage-600">{currentImage.subtitle}</span>
+              Find Your Flow, <br/>
+              <span className="italic font-normal text-sage-600">Reconnect with Self</span>
             </h1>
             <p className="text-lg text-stone-700 mb-8 leading-relaxed">
               Experience a journey of mindfulness and physical well-being through professional guided yoga practices tailored for every level.
